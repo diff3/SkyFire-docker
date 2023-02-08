@@ -1,5 +1,10 @@
 #!/bin/sh
 
+escape() {
+  local tmp=`echo $1 | sed 's/[^a-zA-Z0-9\s:]/\\\&/g'`
+  echo "$tmp"
+}
+
 if [ ! -d "$SOURCE_PREFIX" ]; then
    echo "Can't find soure code, cloning"
    git clone -b $BRANCH $SOURCE_CODE
@@ -54,7 +59,7 @@ if [ -f $INSTALL_PREFIX/etc/$WORLD_CONF.conf.dist ]; then
    cp $INSTALL_PREFIX/etc/$WORLD_CONF.conf.dist $INSTALL_PREFIX/etc/$WORLD_CONF.conf
 fi
 
-# mangosd.conf
+# $WORLD_CONF.conf
 sed -i -e "/DataDir =/ s/= .*/= $(escape $DATA_DIR)/" $ETC_DIR/$WORLD_CONF.conf
 sed -i -e "/LogsDir =/ s/= .*/= $(escape $LOGS_DIR)/" $ETC_DIR/$WORLD_CONF.conf
 
@@ -72,6 +77,6 @@ sed -i -e "/Ra.Enable =/ s/= .*/= $(escape $RA_ENABLE)/" $ETC_DIR/$WORLD_CONF.co
 sed -i -e "/SOAP.Enabled =/ s/= .*/= $(escape $SOAP_ENABLE)/" $ETC_DIR/$WORLD_CONF.conf
 sed -i -e "/SOAP.IP =/ s/= .*/= $(escape $SOAP_IP)/" $ETC_DIR/$WORLD_CONF.conf
 
-# realmd.conf
+# $AUTH_CONF.conf
 sed -i -e "/LogsDir =/ s/= .*/= $(escape $LOGS_DIR)/" $ETC_DIR/$AUTH_CONF.conf
 sed -i -e "/LoginDatabaseInfo =/ s/= .*/= \"$(escape $DB_HOST)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;$AUTH_DB\"/" $ETC_DIR/$AUTH_CONF.conf
