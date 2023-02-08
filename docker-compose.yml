@@ -1,0 +1,91 @@
+version: '3.9'
+
+x-skyfire-volumes: &skyfire-volumes
+  volumes:
+    - ./server:/opt/server/:rw
+    - ./etc:/opt/etc/:rw
+    - ${WOW_PATH}:/opt/wow:rw
+
+x-skyfire-shared: &skyfire-shared
+  environment:
+    - TZ=Europe/Stockholm
+  restart: on-failure
+  tty: true
+
+x-skyfire-build: &skyfire-build
+  dockerfile: Dockerfile
+  args:
+    USER_ID: ${USER_ID:-0}
+    GROUP_ID: ${GROUP_ID:-0}
+
+services:
+  compile:
+    image: skyfire:compile
+    env_file:
+      - ./env/compile.env
+    container_name: skyfire-compile
+    build:
+      context: containers/compile
+      <<: *skyfire-build
+    <<: *skyfire-volumes
+    <<: *skyfire-shared
+    restart: "no"
+    profiles:
+      - compile
+
+  bnetserver:
+    container_name: skyfire-bnetserver
+    image: skyfire:bnetserver
+    build:
+      context: containers/bnetserver
+      <<: *skyfire-build
+    <<: *skyfire-volumes
+    <<: *skyfire-shared
+    ports:
+      - "1119:1119"
+      - "8081:8081"
+
+  mariadb:
+    env_file:
+      - env/mariadb.env
+    ports:
+      - "3306:3306"
+    container_name: skyfire-mariadb
+    hostname: skyfiredb
+    image: skyfire:mariadb
+    build:
+      context: containers/mariadb
+      <<: *skyfire-build
+    <<: *skyfire-volumes
+    <<: *skyfire-shared
+
+  worldserver:
+    container_name: skyfire-worldserver
+    image: skyfire:worldserver
+    build:
+      context: containers/worldserver
+      <<: *skyfire-build
+    <<: *skyfire-volumes
+    <<: *skyfire-shared
+    ports:
+      - "3443:3443"
+      - "8085:8085"
+      - "8086:8086"
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=skyfiredb
+      - PMA_USER=root
+      - PMA_PASSWORD=pwd
+    restart: "no"
+    depends_on:
+      - mariadb
+    profiles:
+      - dev
+
+networks:
+  default:
+    name: skyfire-network

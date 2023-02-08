@@ -1,0 +1,10 @@
+.DS_Store
+server/*
+!server/.keep
+etc/*
+!etc/.keep
+*.sql
+!server/bin/.keep
+!server/etc/.keep
+!server/logs/.keep
+!server/sql/.keep
