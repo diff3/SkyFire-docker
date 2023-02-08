@@ -43,14 +43,26 @@ find /tmp/main_db/world/SFDB_full_548.21.0_2021_01_07.sql -type f | xargs sed -i
 
 mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD world < /tmp/main_db/world/SFDB_full_548.21.0_2021_01_07.sql
 
-echo "Updates"
-cat $SOURCE_PREFIX/sql/updates/auth/*.sql > /tmp/auth.sql
-cat $SOURCE_PREFIX/sql/updates/characters/*.sql > /tmp/characters.sql
-cat $SOURCE_PREFIX/sql/updates/world/*.sql > /tmp/world.sql
+echo "Collecting updates and applying:"
 
-mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD auth < /tmp/auth.sql
-mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD characters < /tmp/characters.sql
-mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD world < /tmp/world.sql
+echo "auth"
+if [ $(ls $SOURCE_PREFIX/sql/updates/auth/* | wc -l) -gt 1 ]; then
+	cat $SOURCE_PREFIX/sql/updates/auth/*.sql > /tmp/auth.sql || :
+	mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD auth < /tmp/auth.sql || :
+fi
+
+echo "characters"
+if [ $(ls $SOURCE_PREFIX/sql/updates/characters/* | wc -l) -gt 1 ]; then
+	cat $SOURCE_PREFIX/sql/updates/characters/*.sql > /tmp/characters.sql || :
+	mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD characters < /tmp/characters.sql || :
+fi
+
+echo "world"
+if [ $(ls $SOURCE_PREFIX/sql/updates/world/* | wc -l) -gt 1 ]; then
+	echo "world2"
+	cat $SOURCE_PREFIX/sql/updates/world/*.sql > /tmp/world.sql || :
+	mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD world < /tmp/world.sql || :
+fi
 
 echo "Adding admin user"
 # mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD auth -e "INSERT INTO account (id, username, sha_pass_hash) VALUES (1, 'admin', '8301316d0d8448a34fa6d0c6bf1cbfa2b4a1a93a');"
@@ -60,4 +72,4 @@ echo "Update realmd info"
 # mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD auth -e "UPDATE realmlist SET NAME='$REALM_NAME', address='$REALM_ADRESS', port='$REALM_PORT', icon='$REALM_ICON', flag='$REALM_FLAG', timezone='$REALM_TIMEZONE', allowedSecurityLevel='$REALM_SECURITY', population='$REALM_POP'  WHERE id = '1';"
 
 echo "Removing files"
-yes | rm -r /tmp/*.sql
+# yes | rm -r /tmp/*.sql
