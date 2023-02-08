@@ -63,15 +63,16 @@ fi
 sed -i -e "/DataDir =/ s/= .*/= $(escape $DATA_DIR)/" $ETC_DIR/$WORLD_CONF.conf
 sed -i -e "/LogsDir =/ s/= .*/= $(escape $LOGS_DIR)/" $ETC_DIR/$WORLD_CONF.conf
 
-sed -i -e "/LoginDatabase.Info              =/ s/= .*/= \"$(escape $DB_HOST)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;$AUTH_DB\"/" $ETC_DIR/$WORLD_CONF.conf
-sed -i -e "/WorldDatabase.Info              =/ s/= .*/= \"$(escape $DB_HOST)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;$WORLD_DB\"/" $ETC_DIR/$WORLD_CONF.conf
-sed -i -e "/CharacterDatabase.Info          =/ s/= .*/= \"$(escape $DB_HOST)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;$CHAR_DB\"/" $ETC_DIR/$WORLD_CONF.conf
+sed -i -e "/LoginDatabaseInfo     =/ s/= .*/= \"$(escape $DB_HOST)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;$AUTH_DB\"/" $ETC_DIR/$WORLD_CONF.conf
+sed -i -e "/WorldDatabaseInfo     =/ s/= .*/= \"$(escape $DB_HOST)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;$WORLD_DB\"/" $ETC_DIR/$WORLD_CONF.conf
+sed -i -e "/CharacterDatabaseInfo =/ s/= .*/= \"$(escape $DB_HOST)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;$CHAR_DB\"/" $ETC_DIR/$WORLD_CONF.conf
 # sed -i -e "/LogsDatabase.Info               =/ s/= .*/= \"$(escape $DB_CONTAINER)\;$MYSQL_PORT\;$(escape $SERVER_DB_USER)\;$(escape $SERVER_DB_PWD)\;logs\"/" $ETC_DIR/$WORLD_CONF.conf
 
 sed -i -e "/GameType =/ s/= .*/= $(escape $GAME_TYPE)/" $ETC_DIR/$WORLD_CONF.conf
 sed -i -e "/RealmZone =/ s/= .*/= $(escape $REALM_ZONE)/" $ETC_DIR/$WORLD_CONF.conf
-sed -i -e "/Motd =/ s/= .*/= $(escape $MOTD_MSG)/" $ETC_DIR/$WORLD_CONF.conf
+sed -i -e "/Motd =/ s/= .*/= $(escape \"$MOTD_MSG)\"/" $ETC_DIR/$WORLD_CONF.conf
 
+sed -i -e "/Console.Enable =/ s/= .*/= $(escape $CONSOLE)/" $ETC_DIR/$WORLD_CONF.conf
 sed -i -e "/Ra.Enable =/ s/= .*/= $(escape $RA_ENABLE)/" $ETC_DIR/$WORLD_CONF.conf
 
 sed -i -e "/SOAP.Enabled =/ s/= .*/= $(escape $SOAP_ENABLE)/" $ETC_DIR/$WORLD_CONF.conf
