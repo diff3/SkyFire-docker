@@ -1,7 +1,6 @@
-FROM debian:bullseye
+FROM ubuntu:20.04
 
 RUN apt-get clean all && apt-get update
-RUN apt-get install -y libmysql++3v5 libssl1.1 libboost-all-dev libncurses-dev mariadb-client
+RUN apt-get install -y libmysqlclient-dev libssl1.1 libboost-all-dev libncurses-dev mariadb-client
 
-WORKDIR /opt/server/bin
-ENTRYPOINT ["./worldserver"]
+WORKDIR /opt/server/binENTRYPOINT ["./worldserver"]
