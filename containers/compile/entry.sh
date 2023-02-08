@@ -47,11 +47,11 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX -DSERVERS=$SERVERS -DSCRIPTS=$S
 make -j $(nproc) install
 
 if [ -f $INSTALL_PREFIX/etc/$AUTH_CONF.conf.dist ]; then
-   cp $INSTALL_PREFIX/etc/$AUTH_CONF.conf.dist $INSTALL_PREFIX/etc
+   cp $INSTALL_PREFIX/etc/$AUTH_CONF.conf.dist $INSTALL_PREFIX/etc/$AUTH_CONF.conf
 fi
 
 if [ -f $INSTALL_PREFIX/etc/$WORLD_CONF.conf.dist ]; then
-   cp $INSTALL_PREFIX/etc/$WORLD_CONF.conf.dist $INSTALL_PREFIX/etc
+   cp $INSTALL_PREFIX/etc/$WORLD_CONF.conf.dist $INSTALL_PREFIX/etc/$WORLD_CONF.conf
 fi
 
 # mangosd.conf
