@@ -4,12 +4,12 @@ echo "Starting Initialization of SkyFire DB..."
 
 echo "Check database sql files"
 
-if [ ! -d "$SOURCE_PREFIX" ]; then
-	git clone https://github.com/ProjectSkyfire/SkyFire_548 /opt/etc
-else
-	cd $SOURCE_PREFIX
-	git pull
-fi
+# if [ ! -d "$SOURCE_PREFIX" ]; then
+#	git clone https://github.com/ProjectSkyfire/SkyFire_548 /opt/etc
+#else
+#	cd $SOURCE_PREFIX
+#	git pull
+# fi
 
 echo "Removing old database and users"
 mysql -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS $AUTH_DB;"
