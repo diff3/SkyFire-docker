@@ -19,6 +19,18 @@ x-skyfire-build: &skyfire-build
     GROUP_ID: ${GROUP_ID:-0}
 
 services:
+    authserver:
+      container_name: skyfire-authserver
+      image: skyfire:authserver
+      build:
+        context: containers/authserver
+        <<: *skyfire-build
+      <<: *skyfire-volumes
+      <<: *skyfire-shared
+      ports:
+        - "1119:1119"
+        - "8081:8081"
+
   compile:
     image: skyfire:compile
     env_file:
@@ -33,19 +45,7 @@ services:
     restart: "no"
     profiles:
       - compile
-
-  bnetserver:
-    container_name: skyfire-bnetserver
-    image: skyfire:bnetserver
-    build:
-      context: containers/bnetserver
-      <<: *skyfire-build
-    <<: *skyfire-volumes
-    <<: *skyfire-shared
-    ports:
-      - "1119:1119"
-      - "8081:8081"
-
+      
   mariadb:
     env_file:
       - env/mariadb.env
