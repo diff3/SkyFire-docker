@@ -22,7 +22,8 @@ services:
   compile:
     image: skyfire:compile
     env_file:
-      - ./env/compile.env
+      - env/compile.env
+      - env/shared.env
     container_name: skyfire-compile
     build:
       context: containers/compile
@@ -48,6 +49,7 @@ services:
   mariadb:
     env_file:
       - env/mariadb.env
+      - env/shared.env
     ports:
       - "3306:3306"
     container_name: skyfire-mariadb
